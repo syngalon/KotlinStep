@@ -1,13 +1,11 @@
 package com.tpv.mantis.kotlinstep
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import com.tpv.mantis.kotlinstep.vo.Teacher
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.File.separator
-import kotlin.properties.Delegates
 import kotlin.reflect.KProperty
 
 
@@ -31,6 +29,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         return theOldestPerson!!
     }
+
 
     val sum = { x: Int, y: Int -> x + y }
 
@@ -162,7 +161,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     )
 
     enum class OS {WINDOWS, LINUX, MAC, IOS, ANDROID}
-    val log2 = listOf(SiteVisit("/", 34.0, OS.WINDOWS),
+    val log2 = listOf(SiteVisit( "/", 34.0, OS.WINDOWS),
             SiteVisit("/", 22.0, OS.MAC),
             SiteVisit("/login", 12.0, OS.WINDOWS),
             SiteVisit("/signup", 8.0, OS.IOS),
@@ -171,17 +170,68 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun List<SiteVisit>.averageDuration(predicate: (SiteVisit) -> Boolean) = (filter(predicate).map(SiteVisit::duration)).average()
     ////////////////////////////////////////////////////////////////////
 
+    fun decimalDigitValue(c: Char): Int {
+        if (c !in '0'..'9') {
+            throw IllegalArgumentException("Out of range")
+        }
+        Log.d(TAG, "c: ${c.toInt()}")
+        return c.toInt() - '0'.toInt()  // convert to digit explicitly
+    }
+
+    val testLazy: String by lazy {
+        Log.d(TAG, "lazyTest entered")
+        "lazyTest"
+    }
+
+    private fun testLazyAttr() {
+        Log.d(TAG, "Begin to init lazy attr")
+        result1View.text = testLazy
+    }
+    private fun testTeacher():Unit {
+        var teacher: Teacher = Teacher()
+        teacher.lastName = "nang"
+        result1View.text = String.format("lastName: %s, weight: %f", teacher.lastName, teacher.weight)
+
+        teacher.no = 4
+
+        teacher.gender = "male"
+        result2View.text = String.format("no: %d, gender: %s", teacher.no, teacher.gender)
+
+    }
+
     override fun onClick(p0: View?) {
         when (p0!!.id) {
+
             R.id.calcBtn -> {
-//                for (siteVisit in log2) {
-//                    if (siteVisit.os in setOf(OS.ANDROID,   OS.WINDOWS)) {
-//                        Log.d(TAG, "siteVisit.name: ${siteVisit.duration}, siteVisit.os: ${siteVisit.os}")
+                testLazyAttr()
+            }
+
+//            R.id.calcBtn -> {
+//                var sum =  0
+//                val content = "12345"
+//                for (c in content) {
+//                    Log.d(TAG, "char: $c")
+//                    sum += decimalDigitValue(c)
+//                }
+//                result1View.text = sum.toString()
+//
+//                loop@ for (i in 1..10) {
+//                    for (j in 1..10) {
+//                        if (i * j == 100) {
+//                            continue@loop
+//                        }
 //                    }
 //                }
-                val avgDur = log2.averageDuration { it.os in setOf(OS.ANDROID,   OS.WINDOWS) }
-                Log.d(TAG, "log2 averageDuration: $avgDur")
-            }
+//            }
+//            R.id.calcBtn -> {
+////                for (siteVisit in log2) {
+////                    if (siteVisit.os in setOf(OS.ANDROID,   OS.WINDOWS)) {
+////                        Log.d(TAG, "siteVisit.name: ${siteVisit.duration}, siteVisit.os: ${siteVisit.os}")
+////                    }
+////                }
+//                val avgDur = log2.averageDuration { it.os in setOf(OS.ANDROID,   OS.WINDOWS) }
+//                Log.d(TAG, "log2 averageDuration: $avgDur")
+//            }
 //            R.id.calcBtn -> {
 //                val studInfoFilter = StudInfoFilter()
 //                studInfoFilter.prefix = "L"
@@ -248,7 +298,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val printStr = { str: Int -> Log.d("TTTT", "$str") }
     }
 
-    class Derived(b: Base) : Base by b
+    class Derived(b: Base) : Base by b {
+
+    }
 }
 
 class Example {
