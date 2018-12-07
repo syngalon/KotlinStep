@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import com.tpv.mantis.kotlinstep.vo.Syngalon
 import com.tpv.mantis.kotlinstep.vo.Teacher
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.reflect.KProperty
@@ -11,8 +12,11 @@ import kotlin.reflect.KProperty
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
+    companion object {
+        const val  TAG = "KotlinStep"
+    }
 
-    val TAG = "KotlinStep"
+
 
     data class Person(val name: String, val age: Int)
 
@@ -199,6 +203,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun testConstructor() {
+        var syngalon = Syngalon("匿丛螳刀", 1000)
+        Log.d(TAG, syngalon.siteName)
+        Log.d(TAG, syngalon.url)
+        Log.d(TAG, syngalon.url)
+        syngalon.printTest()
+    }
     override fun onClick(p0: View?) {
         when (p0!!.id) {
 
