@@ -207,14 +207,45 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         var syngalon = Syngalon("匿丛螳刀", 1000)
         Log.d(TAG, syngalon.siteName)
         Log.d(TAG, syngalon.url)
-        Log.d(TAG, syngalon.url)
+        Log.d(TAG, syngalon.country)
         syngalon.printTest()
     }
+
+    /////////////////////////////////////////////////////////
+    open class BaseClass {
+        open fun baseFun() {}
+    }
+
+    abstract class DerivedClass : BaseClass() {
+        abstract override fun baseFun()
+    }
+
+    ////////////////////////////////////////////////////////
+    class Outer {
+        private val bar: Int = 1
+        var v: String = "menber var"
+        inner class Inner{
+            fun foo() = bar
+            fun innerTest() {
+                val o = this@Outer   //为了消除歧义，要访问来自外部作用域的 this，我们使用this@label，其中 @label 是一个 代指 this 来源的标签
+                Log.d(TAG, "inner class can reference outer class: " + o.v)
+            }
+
+        }
+    }
+
+    private fun testInner() {
+        val demo1 = Outer().Inner().foo()
+        Log.d(TAG, String.format("demo: %d", demo1))
+        val demo2 = Outer().Inner().innerTest()
+    }
+
+    ///////////////////////////////////////////////////////
     override fun onClick(p0: View?) {
         when (p0!!.id) {
 
             R.id.calcBtn -> {
-                testLazyAttr()
+                testInner()
             }
 
 //            R.id.calcBtn -> {
