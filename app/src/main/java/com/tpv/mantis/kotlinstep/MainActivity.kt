@@ -1,6 +1,9 @@
 package com.tpv.mantis.kotlinstep
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -241,11 +244,101 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     ///////////////////////////////////////////////////////
+    interface TestInterface {
+        fun test()
+    }
+
+    class Yao {
+        var v: String = "jooper"
+        fun setInterface(testInterface: TestInterface) {
+            testInterface.test()
+        }
+    }
+
+    private fun testAnoymousInnerClass() {
+        var test = Yao()
+        /**
+         * 采用对象表达式来创建接口对象，即匿名内部类的实例。
+         */
+        test.setInterface(object : TestInterface {
+            override fun test() {
+                result1View.text = "对象表达式创建匿名内部类的实例"
+            }
+        })
+
+    }
+
+    ///////////////////////////////////////////////////////
+
+    open class Man(var name: String, var age: Int)
+
+    class Wang(name: String, age: Int, var no: Int, var score: Float): Man(name, age)  // with main constructor
+
+    private fun testInherit1() {
+        var wang = Wang("老王", 28, 2, 45.4f)
+        result1View.text = String.format("name: %s, age: %d, no: %d, score: %s", wang.name, wang.age, wang.no, wang.score)
+    }
+
+    ///////////////////////////////////////////////////////
+    open class Creature(name: String){
+        constructor(name: String, age: Int) : this(name) {
+            Log.d(TAG, "Creature---init secondary constructor")
+        }
+
+    }
+
+    class Alien : Creature {  // without main constructor
+        constructor(name: String, age: Int, address: String) : super(name, age){
+            Log.d(TAG, "Alien---inherit secondard constructor of Creature")
+            Log.d(TAG, "name: $name , age: $age, address: $address")
+        }
+    }
+
+    private fun testInherit2() {
+        var alien = Alien("MaoMao", 2356, "The space")
+    }
+
+    ///////////////////////////////////////////////////////
+    open class A {
+        open fun f() {
+            Log.d(TAG, "A")
+        }
+
+        fun a() {
+            Log.d(TAG, "a")
+        }
+    }
+
+    interface B {
+        fun f() { //接口的成员变量默认是 open 的
+            Log.d(TAG, "B")
+        }
+
+        fun b() {
+            Log.d(TAG, "b")
+        }
+    }
+
+    class C:A(), B {
+        override fun f() {
+            // 如果有多个相同的方法（继承或者实现自其他类，如A、B类），则必须要重写该方法，使用super范型去选择性地调用父类的实现。
+            super<A>.f()
+            super<B>.f()
+        }
+    }
+
+    private fun testInherit3() {
+        val c = C()
+        c.f()
+    }
+
+    ///////////////////////////////////////////////////////
+
     override fun onClick(p0: View?) {
         when (p0!!.id) {
 
             R.id.calcBtn -> {
-                testInner()
+                testInherit3()
             }
 
 //            R.id.calcBtn -> {
